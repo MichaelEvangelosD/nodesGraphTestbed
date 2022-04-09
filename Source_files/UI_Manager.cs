@@ -39,25 +39,37 @@ namespace NodeGraphTestbed_lists
             //Graph creation - Pass
             Graph graph = new Graph("banana");
 
+            Console.ReadKey();
+
             //Adding nodes - Pass
             graph.AddNode("glyfada");
+            Console.ReadKey();
+
             graph.AddNode("faliro");
+            Console.ReadKey();
 
             //Add Connection - Pass
             graph.AddConnection("banana", "glyfada");
+            Console.ReadKey();
 
             //Connection duplication - Pass
             graph.AddConnection("banana", "glyfada");
+            Console.ReadKey();
 
             //Connection invalid - Pass
-            //graph.AddConnection("gata", "glyfada");
+            graph.AddConnection("gata", "glyfada");
+            Console.ReadKey();
 
             //Node deletion - Pass
             graph.RemoveNode("glyfada");
+            Console.ReadKey();
+
+            //Connection is removed - Pass
+            graph.RemoveConnection("banana", "glyfada");
+            Console.ReadKey();
 
             //Correct info dumping - Pass
             graph.Dump();
-
             Console.ReadKey();
         }
 

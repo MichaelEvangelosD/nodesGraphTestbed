@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//TODO: When we delete a node, all connections with THIS node should get deleted too to not get miss-matched connection Dumping()
+
 namespace Graphs
 {
     public class Graph
@@ -44,36 +46,86 @@ namespace Graphs
             }
         }
 
+        /// <summary>
+        /// Call to delete a node from the nodes List with the supplied name.
+        /// </summary>
+        /// <param name="node">Name of the node to delete</param>
         public void RemoveNode(string node)
         {
-            if (IsNode(node))
+            if (!IsNode(node))
             {
-                int index = nodes.IndexOf(node);
+                Console.WriteLine($"{node} does not exist in the nodes list.");
+                return;
+            }
 
-                _TryNodeDeletion(index);
+            //Grab the nodes index inside the list 
+            int index = nodes.IndexOf(node);
+
+            //Try removing the element at index...
+            if (_TryRemoveAtIndex(nodes, index))
+            {
+                //Remove all connections between and towards this node.
+                _RemoveConnectionsWithNode(index);
+
+                Console.WriteLine($"Node \"{node}\" deleted.");
             }
             else
             {
-                Console.WriteLine($"{node} does not exist in the nodes list.");
+                Console.WriteLine($"Node \"{node}\" could not be deleted.");
             }
         }
 
-        void _TryNodeDeletion(int nodeIndex)
+        /// <summary>
+        /// Call to remove all connections that connect OR are connected to the to-be-deleted node.
+        /// </summary>
+        /// <param name="index">Index of the to-be-deleted node.</param>
+        void _RemoveConnectionsWithNode(int index)
         {
-            string tempString = nodes[nodeIndex]; //Cache the node name to display it 
+            for (int i = 0; i < GetConnectionsCount(); i++)
+            {
+                if (connections[i].from_index == index || connections[i].to_index == index)
+                {
+                    _TryRemoveAtIndex(connections, i);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Call to Try and remove the node at index "index".
+        /// <para>Prints a node deletion failure if the index is out of the given List bounds.</para>
+        /// </summary>
+        bool _TryRemoveAtIndex(List<string> list, int index)
+        {
             try
             {
-                nodes.RemoveAt(nodeIndex);
+                list.RemoveAt(index);
             }
             catch (ArgumentOutOfRangeException)
             {
-                Console.WriteLine($"Given index {nodeIndex} is out of range.");
-                throw;
+                Console.WriteLine($"Given node index {index} is out of range.");
+                return false;
             }
 
-            //Deletion successful
-            Console.WriteLine($"Node \"{tempString}\" deleted.");
+            return true;
+        }
+
+        /// <summary>
+        /// Call to Try and remove the element at index "index".
+        /// <para>Prints a node deletion failure if the index is out of the given List bounds.</para>
+        /// </summary>
+        bool _TryRemoveAtIndex(List<Connection> list, int index)
+        {
+            try
+            {
+                list.RemoveAt(index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine($"Given node index {index} is out of range.");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -81,6 +133,9 @@ namespace Graphs
         /// </summary>
         public void AddConnection(string from, string to)
         {
+            //Early exit if the given strings do not match a node.
+            if (!IsNode(from) || !IsNode(to)) return;
+
             //Early exit if the connection already exists.
             if (IsConnected(from, to))
             {
@@ -89,18 +144,7 @@ namespace Graphs
             }
 
             int from_index = nodes.IndexOf(from);
-
-            if (from_index == -1)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
             int to_index = nodes.IndexOf(to);
-
-            if (to_index == -1)
-            {
-                throw new IndexOutOfRangeException();
-            }
 
             //Create connection instance
             Connection newConnection = new Connection();
@@ -113,31 +157,28 @@ namespace Graphs
 
         public void RemoveConnection(string from, string to)
         {
-            if (!IsNode(from))
-            {
-                Console.WriteLine($"{from} is not a node.");
-                return;
-            }
+            //Early exit if one or both of the supplied strings is not a node
+            if (!IsNode(from) || !IsNode(to))
+            { return; }
 
-            if (!IsNode(to))
-            {
-                Console.WriteLine($"{to} is not a node.");
-                return;
-            }
-
+            //Grab the index of the nodes
             int fromIndex = nodes.IndexOf(from);
             int toIndex = nodes.IndexOf(to);
 
-            for (int i = 0; i < ConnectionCount(); i++)
+            //Itterate through the connections List and...
+            for (int i = 0; i < GetConnectionsCount(); i++)
             {
+                //If we find the exact same connection...
                 if (connections[i].from_index == fromIndex && connections[i].to_index == toIndex)
                 {
+                    //Remove it
                     connections.RemoveAt(i);
                     Console.WriteLine($"Connection {from} to {to} deleted.");
                     return;
                 }
             }
 
+            //Writes this in the console if we did NOT find the supplied connection.
             Console.WriteLine($"Connection {from} to {to} could not be found.");
         }
 
@@ -150,22 +191,16 @@ namespace Graphs
         /// <returns>True if the connection exists inside the connections list, false if not.</returns>
         public bool IsConnected(string from, string to)
         {
-            if (!IsNode(from))
+            //EARLY EXIT if one of the supplied values is not a node
+            if (!IsNode(from) || !IsNode(to))
             {
-                Console.WriteLine($"{from} is not a node.");
-                return false;
-            }
-
-            if (!IsNode(to))
-            {
-                Console.WriteLine($"{to} is not a node.");
                 return false;
             }
 
             int fromIndex = nodes.IndexOf(from);
             int toIndex = nodes.IndexOf(to);
 
-            for (int i = 0; i < ConnectionCount(); i++)
+            for (int i = 0; i < GetConnectionsCount(); i++)
             {
                 if (_EvaluateConnection(connections[i], fromIndex, toIndex))
                 {
@@ -194,13 +229,13 @@ namespace Graphs
         }
 
         /// <returns>The nodes List element count.</returns>
-        public int NodeCount()
+        public int GetNodeCount()
         {
             return nodes.Count;
         }
 
         /// <returns>The connections List element count.</returns>
-        public int ConnectionCount()
+        public int GetConnectionsCount()
         {
             return connections.Count;
         }
@@ -219,7 +254,7 @@ namespace Graphs
         /// </summary>
         void _PrintNodes()
         {
-            int nodeCount = NodeCount();
+            int nodeCount = GetNodeCount();
 
             Console.WriteLine($"Total nodes in the list: {nodeCount}");
 
@@ -234,7 +269,7 @@ namespace Graphs
         /// </summary>
         void _PrintNodeConnections()
         {
-            int nodeConnectionsCount = ConnectionCount();
+            int nodeConnectionsCount = GetConnectionsCount();
 
             Console.WriteLine($"Total connections in the list: {nodeConnectionsCount}");
 
