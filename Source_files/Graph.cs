@@ -75,13 +75,16 @@ namespace Graphs
 
         public void AddConnection(string from, string to)
         {
-            // TODO: check if the connection already exists...
+            //Early exit if the connection already exists.
+            if (IsConnected(from, to))
+                return;
+
 
             int from_index = nodes.IndexOf(from);
 
             if (from_index == -1)
             {
-                // TODO: throw error, exit...
+                Console.WriteLine($"Station \"{from}\" does not exist");
                 return;
             }
 
@@ -89,10 +92,11 @@ namespace Graphs
 
             if (to_index == -1)
             {
-                // TODO: throw error, exit...
+                Console.WriteLine($"Station \"{to}\" does not exist");
                 return;
             }
 
+            //Create connection instance
             Connection newConnection = new Connection();
 
             newConnection.from_index = from_index;
@@ -107,10 +111,7 @@ namespace Graphs
             int fromNode = nodes.IndexOf(from);
             int toNode = nodes.IndexOf(to);
 
-            if (true)
-            {
 
-            }
         }
 
         /// <returns>True if the node exists inside the nodes list, false if not.</returns>
@@ -119,18 +120,40 @@ namespace Graphs
             return nodes.Contains(node);
         }
 
-        //TODO
         /// <returns>True if the connection exists inside the connections list, false if not.</returns>
         public bool IsConnected(string from, string to)
         {
+            int fromIndex = nodes.IndexOf(from);
+            int toIndex = nodes.IndexOf(to);
 
+            if (fromIndex == -1 || toIndex == -1)
+            {
+                Console.WriteLine($"One of the supplied station does not exist.");
+                return false;
+            }
 
             for (int i = 0; i < ConnectionCount(); i++)
             {
-                if (connections[i])
+                if (_EvaluateConnection(connections[i], fromIndex, toIndex))
                 {
-
+                    Console.WriteLine($"Connection from {from} to {to} exists.");
+                    return true;
                 }
+            }
+
+            return false;
+        }
+
+        bool _EvaluateConnection(Connection connection, int from, int to)
+        {
+            if ((connection.from_index == from && connection.to_index == to)
+                || (connection.from_index == to && connection.to_index == from))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
