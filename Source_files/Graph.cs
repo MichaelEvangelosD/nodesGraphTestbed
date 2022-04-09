@@ -60,6 +60,8 @@ namespace Graphs
 
         void _TryNodeDeletion(int nodeIndex)
         {
+            string tempString = nodes[nodeIndex]; //Cache the node name to display it 
+
             try
             {
                 nodes.RemoveAt(nodeIndex);
@@ -70,30 +72,34 @@ namespace Graphs
                 throw;
             }
 
-            Console.WriteLine($"Node \"{nodes[nodeIndex]}\" deleted.");
+            //Deletion successful
+            Console.WriteLine($"Node \"{tempString}\" deleted.");
         }
 
+        /// <summary>
+        /// Call to create a new connection between from and to, ONLY if it does not already exist.
+        /// </summary>
         public void AddConnection(string from, string to)
         {
             //Early exit if the connection already exists.
             if (IsConnected(from, to))
+            {
+                Console.WriteLine($"Connection from {from} to {to} already exists.");
                 return;
-
+            }
 
             int from_index = nodes.IndexOf(from);
 
             if (from_index == -1)
             {
-                Console.WriteLine($"Station \"{from}\" does not exist");
-                return;
+                throw new IndexOutOfRangeException();
             }
 
             int to_index = nodes.IndexOf(to);
 
             if (to_index == -1)
             {
-                Console.WriteLine($"Station \"{to}\" does not exist");
-                return;
+                throw new IndexOutOfRangeException();
             }
 
             //Create connection instance
@@ -105,13 +111,34 @@ namespace Graphs
             connections.Add(newConnection);
         }
 
-        //TODO
         public void RemoveConnection(string from, string to)
         {
-            int fromNode = nodes.IndexOf(from);
-            int toNode = nodes.IndexOf(to);
+            if (!IsNode(from))
+            {
+                Console.WriteLine($"{from} is not a node.");
+                return;
+            }
 
+            if (!IsNode(to))
+            {
+                Console.WriteLine($"{to} is not a node.");
+                return;
+            }
 
+            int fromIndex = nodes.IndexOf(from);
+            int toIndex = nodes.IndexOf(to);
+
+            for (int i = 0; i < ConnectionCount(); i++)
+            {
+                if (connections[i].from_index == fromIndex && connections[i].to_index == toIndex)
+                {
+                    connections.RemoveAt(i);
+                    Console.WriteLine($"Connection {from} to {to} deleted.");
+                    return;
+                }
+            }
+
+            Console.WriteLine($"Connection {from} to {to} could not be found.");
         }
 
         /// <returns>True if the node exists inside the nodes list, false if not.</returns>
@@ -123,20 +150,25 @@ namespace Graphs
         /// <returns>True if the connection exists inside the connections list, false if not.</returns>
         public bool IsConnected(string from, string to)
         {
-            int fromIndex = nodes.IndexOf(from);
-            int toIndex = nodes.IndexOf(to);
-
-            if (fromIndex == -1 || toIndex == -1)
+            if (!IsNode(from))
             {
-                Console.WriteLine($"One of the supplied station does not exist.");
+                Console.WriteLine($"{from} is not a node.");
                 return false;
             }
+
+            if (!IsNode(to))
+            {
+                Console.WriteLine($"{to} is not a node.");
+                return false;
+            }
+
+            int fromIndex = nodes.IndexOf(from);
+            int toIndex = nodes.IndexOf(to);
 
             for (int i = 0; i < ConnectionCount(); i++)
             {
                 if (_EvaluateConnection(connections[i], fromIndex, toIndex))
                 {
-                    Console.WriteLine($"Connection from {from} to {to} exists.");
                     return true;
                 }
             }
@@ -144,6 +176,10 @@ namespace Graphs
             return false;
         }
 
+        /// <summary>
+        /// Call to check if the supplied connection ints match the from and to ints in both directions.
+        /// </summary>
+        /// <returns>True if the connection ints match the supplied ints, false otherwise.</returns>
         bool _EvaluateConnection(Connection connection, int from, int to)
         {
             if ((connection.from_index == from && connection.to_index == to)
@@ -189,7 +225,7 @@ namespace Graphs
 
             for (int i = 0; i < nodeCount; i++)
             {
-                Console.WriteLine(nodes[i]);
+                Console.WriteLine($"{i + 1}: {nodes[i]}");
             }
         }
 
@@ -200,11 +236,16 @@ namespace Graphs
         {
             int nodeConnectionsCount = ConnectionCount();
 
-            Console.WriteLine($"Total nodes in the list: {nodeConnectionsCount}");
+            Console.WriteLine($"Total connections in the list: {nodeConnectionsCount}");
 
             for (int i = 0; i < nodeConnectionsCount; i++)
             {
-                Console.WriteLine(connections[i].ToString());
+                int fromIndex = 0, toIndex = 0;
+
+                fromIndex = connections[i].from_index;
+                toIndex = connections[i].to_index;
+
+                Console.WriteLine($"{i + 1}: {nodes[fromIndex]} connects to {nodes[toIndex]}");
             }
         }
     }
