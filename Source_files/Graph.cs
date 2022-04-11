@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Graphs.DFSTraverse;
 
 namespace Graphs
 {
@@ -162,7 +163,9 @@ namespace Graphs
             newConnection.from_index = from_index;
             newConnection.to_index = to_index;
 
-            connections.Add(newConnection);
+             connections.Add(newConnection);
+
+            Console.WriteLine($"Created connection from {fromNode} to {toNode}");
         }
 
         /// <summary>
@@ -352,22 +355,7 @@ namespace Graphs
         }
         #endregion
 
-        public void DFSTraverse(string node)
-        {
-
-            // step 1: visit the node...
-            Console.WriteLine(node);
-
-            // step 2: find all neighbours of node...
-            List<string> neighbours = GetNeighbours(node);
-
-            // step 3: DFS traverse each one of the neighbours...
-            foreach (string neighbour in neighbours)
-            {
-                DFSTraverse(neighbour);
-            }
-        }
-
+        
         public void CreateSampleGraph()
         {
             //Clear the whole graph lists first
@@ -393,7 +381,8 @@ namespace Graphs
             //Uncomment to create stackOverflow exception
             //AddConnection("F", "E");
 
-            DFSTraverse("A");
+            //Begin traversing the given graph
+            DFSTraverser.DFSTraverse(graph: this,"A");
         }
     }
 }
