@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//TODO: When we delete a node, all connections with THIS node should get deleted too to not get miss-matched connection Dumping()
-
 namespace Graphs
 {
     public class Graph
@@ -70,7 +68,7 @@ namespace Graphs
             if (_TryRemoveAtIndex(nodes, index))
             {
                 //Remove all connections between and towards this node.
-                _RemoveConnectionsWithNode(index);
+                //_RemoveConnectionsWithNode(index);
 
                 Console.WriteLine($"Node \"{node.ToUpper()}\" deleted.");
             }
@@ -84,7 +82,7 @@ namespace Graphs
         /// Call to remove all connections that connect OR are connected to the to-be-deleted node.
         /// </summary>
         /// <param name="index">Index of the to-be-deleted node.</param>
-        void _RemoveConnectionsWithNode(int index)
+        /*void _RemoveConnectionsWithNode(int index)
         {
             for (int i = 0; i < GetConnectionsCount(); i++)
             {
@@ -93,7 +91,7 @@ namespace Graphs
                     _TryRemoveAtIndex(connections, i);
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Call to Try and remove the node at index "index".
@@ -237,8 +235,7 @@ namespace Graphs
         /// <returns>True if the connection ints match the supplied ints, false otherwise.</returns>
         bool _EvaluateConnection(Connection connection, int fromIndex, int toIndex)
         {
-            if ((connection.from_index == fromIndex && connection.to_index == toIndex)
-                || (connection.from_index == toIndex && connection.to_index == fromIndex))
+            if ((connection.from_index == fromIndex && connection.to_index == toIndex))
             {
                 return true;
             }
@@ -317,6 +314,84 @@ namespace Graphs
             }
 
             Console.WriteLine("");
+        }
+
+        /// <summary>
+        /// Call to empty both the nodes and connections Lists
+        /// </summary>
+        public void Empty()
+        {
+            nodes = new List<string>();
+            connections = new List<Connection>();
+        }
+
+        public List<string> GetNeighbours(string node)
+        {
+            int from_index = nodes.IndexOf(node);
+
+            if (from_index == -1)
+            {
+                // TODO: throw error, exit...
+                return null;
+            }
+
+            List<string> neighbours = new List<string>();
+
+            foreach (Connection connection in connections)
+            {
+                if (connection.from_index == from_index)
+                {
+                    int to_index = connection.to_index;
+                    string neighbour = nodes[to_index];
+                    neighbours.Add(neighbour);
+                }
+            }
+
+            return neighbours;
+        }
+
+        public void DFSTraverse(string node)
+        {
+
+            // step 1: visit the node...
+            Console.WriteLine(node);
+
+            // step 2: find all neighbours of node...
+            List<string> neighbours = GetNeighbours(node);
+
+            // step 3: DFS traverse each one of the neighbours...
+            foreach (string neighbour in neighbours)
+            {
+                DFSTraverse(neighbour);
+            }
+        }
+
+        public void CreateSampleGraph()
+        {
+            //Clear the whole graph lists first
+            Empty();
+
+            //Create the nodes
+            AddNode("A");
+            AddNode("B");
+            AddNode("C");
+            AddNode("D");
+            AddNode("E");
+            AddNode("F");
+
+            //Create the connections
+            AddConnection("A", "B");
+            AddConnection("B", "C");
+            AddConnection("C", "F");
+
+            AddConnection("B", "D");
+            AddConnection("D", "E");
+            AddConnection("E", "F");
+
+            //Uncomment to create stackOverflow exception
+            //AddConnection("F", "E");
+
+            DFSTraverse("A");
         }
     }
 }

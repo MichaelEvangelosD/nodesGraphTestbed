@@ -74,6 +74,13 @@ namespace NodeGraphTestbed_lists
             //Correct info dumping - Pass
             graph.Dump();
             Console.ReadKey();
+
+            graph.Empty();
+
+            graph.CreateSampleGraph();
+            graph.Dump();
+
+            Console.ReadKey();
         }
 
         static void Main(string[] args)
