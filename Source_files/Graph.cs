@@ -178,8 +178,8 @@ namespace Graphs
             { return; }
 
             //Grab the index of the nodes
-            int fromIndex = nodes.IndexOf(from);
-            int toIndex = nodes.IndexOf(to);
+            int fromIndex = nodes.IndexOf(fromNode);
+            int toIndex = nodes.IndexOf(toNode);
 
             //Itterate through the connections List and...
             for (int i = 0; i < GetConnectionsCount(); i++)
@@ -306,6 +306,7 @@ namespace Graphs
         }
         #endregion
 
+        #region Utilities
         void PrintSeparators()
         {
             for (int i = 0; i < 50; i++)
@@ -349,6 +350,7 @@ namespace Graphs
 
             return neighbours;
         }
+        #endregion
 
         public void DFSTraverse(string node)
         {
