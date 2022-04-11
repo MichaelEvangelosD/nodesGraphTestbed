@@ -162,6 +162,7 @@ namespace Graphs
             { return; }
 
             //Grab the index of the nodes
+
             int fromIndex = nodes.IndexOf(from);
             int toIndex = nodes.IndexOf(to);
 
