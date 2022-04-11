@@ -44,7 +44,6 @@ namespace NodeGraphTestbed_lists
             //Adding nodes - Pass
             graph.AddNode("glyfada");
             Console.ReadKey();
-
             graph.AddNode("faliro");
             Console.ReadKey();
 
@@ -75,7 +74,6 @@ namespace NodeGraphTestbed_lists
 
         static void Main(string[] args)
         {
-
             new UI_Manager().Run();
         }
     }

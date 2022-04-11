@@ -22,29 +22,29 @@ namespace Graphs
 
         private List<Connection> connections = new List<Connection>();
 
-        public Graph(string node)
+        public Graph(string nodeName)
         {
             //We have to initialize the graph with at least ONE node.
-            AddNode(node);
+            AddNode(nodeName);
         }
 
         /// <summary>
         /// Call to add a new node in the list ONLY if it not already in the list.
         /// </summary>
-        /// <param name="node">The new node's name.</param>
-        public void AddNode(string node)
+        /// <param name="nodeName">The new node's name.</param>
+        public void AddNode(string nodeName)
         {
             PrintSeparators();
 
-            if (!IsNode(node))
+            if (!IsNode(nodeName))
             {
-                nodes.Add(node);
+                nodes.Add(nodeName);
 
-                Console.WriteLine($"Node {node} created in the nodes list.");
+                Console.WriteLine($"Node {nodeName} created in the nodes list.");
             }
             else
             {
-                Console.WriteLine($"Node {node.ToUpper()} already exists in the nodes list.");
+                Console.WriteLine($"Node {nodeName.ToUpper()} already exists in the nodes list.");
             }
         }
 
@@ -138,25 +138,25 @@ namespace Graphs
         /// <summary>
         /// Call to create a new connection between from and to, ONLY if it does not already exist.
         /// </summary>
-        public void AddConnection(string from, string to)
+        public void AddConnection(string fromNode, string toNode)
         {
             PrintSeparators();
 
             //Early exit if the given strings do not match a node.
-            if (!IsNode(from) || !IsNode(to))
+            if (!IsNode(fromNode) || !IsNode(toNode))
             {
-                Console.WriteLine($"\tERROR: Invalid nodes passed \n\t{from} + {to}");
+                Console.WriteLine($"\tERROR: Invalid nodes passed for connection creation.\n\t{fromNode} + {toNode}");
                 return;
             }
             //Early exit if the connection already exists.
-            if (IsConnected(from, to))
+            if (IsConnected(fromNode, toNode))
             {
-                Console.WriteLine($"Connection from {from.ToUpper()} to {to.ToUpper()} already exists.");
+                Console.WriteLine($"Connection from {fromNode.ToUpper()} to {toNode.ToUpper()} already exists.");
                 return;
             }
 
-            int from_index = nodes.IndexOf(from);
-            int to_index = nodes.IndexOf(to);
+            int from_index = nodes.IndexOf(fromNode);
+            int to_index = nodes.IndexOf(toNode);
 
             //Create connection instance
             Connection newConnection = new Connection();
@@ -209,16 +209,16 @@ namespace Graphs
         }
 
         /// <returns>True if the connection exists inside the connections list, false if not.</returns>
-        public bool IsConnected(string from, string to)
+        public bool IsConnected(string fromNode, string toNode)
         {
             //EARLY EXIT if one of the supplied values is not a node
-            if (!IsNode(from) || !IsNode(to))
+            if (!IsNode(fromNode) || !IsNode(toNode))
             {
                 return false;
             }
 
-            int fromIndex = nodes.IndexOf(from);
-            int toIndex = nodes.IndexOf(to);
+            int fromIndex = nodes.IndexOf(fromNode);
+            int toIndex = nodes.IndexOf(toNode);
 
             for (int i = 0; i < GetConnectionsCount(); i++)
             {
@@ -235,10 +235,10 @@ namespace Graphs
         /// Call to check if the supplied connection ints match the from and to ints in both directions.
         /// </summary>
         /// <returns>True if the connection ints match the supplied ints, false otherwise.</returns>
-        bool _EvaluateConnection(Connection connection, int from, int to)
+        bool _EvaluateConnection(Connection connection, int fromIndex, int toIndex)
         {
-            if ((connection.from_index == from && connection.to_index == to)
-                || (connection.from_index == to && connection.to_index == from))
+            if ((connection.from_index == fromIndex && connection.to_index == toIndex)
+                || (connection.from_index == toIndex && connection.to_index == fromIndex))
             {
                 return true;
             }
