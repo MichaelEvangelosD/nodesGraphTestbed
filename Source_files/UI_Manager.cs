@@ -63,13 +63,13 @@ namespace NodeGraphTestbed_lists
 
             graph.AddConnection("Pireus", "glyfada");
 
-            //Node deletion - Pass
-            //graph.RemoveNode("glyfada");
+            /*//Node deletion - Pass
+            graph.RemoveNode("glyfada");
             Console.ReadKey();
 
             //Connection is removed - Pass
-            //graph.RemoveConnection("banana", "glyfada");
-            Console.ReadKey();
+            graph.RemoveConnection("banana", "glyfada");
+            Console.ReadKey();*/
 
             //Correct info dumping - Pass
             graph.Dump();
