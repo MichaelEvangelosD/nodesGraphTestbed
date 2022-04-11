@@ -44,9 +44,10 @@ namespace NodeGraphTestbed_lists
             //Adding nodes - Pass
             graph.AddNode("glyfada");
             Console.ReadKey();
-
             graph.AddNode("faliro");
             Console.ReadKey();
+            graph.AddNode("Pireus");
+
 
             //Add Connection - Pass
             graph.AddConnection("banana", "glyfada");
@@ -60,22 +61,30 @@ namespace NodeGraphTestbed_lists
             graph.AddConnection("gata", "glyfada");
             Console.ReadKey();
 
-            //Node deletion - Pass
+            graph.AddConnection("Pireus", "glyfada");
+
+            /*//Node deletion - Pass
             graph.RemoveNode("glyfada");
             Console.ReadKey();
 
             //Connection is removed - Pass
             graph.RemoveConnection("banana", "glyfada");
-            Console.ReadKey();
+            Console.ReadKey();*/
 
             //Correct info dumping - Pass
             graph.Dump();
+            Console.ReadKey();
+
+            graph.Empty();
+
+            graph.CreateSampleGraph();
+            graph.Dump();
+
             Console.ReadKey();
         }
 
         static void Main(string[] args)
         {
-
             new UI_Manager().Run();
         }
     }

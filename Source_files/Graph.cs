@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//TODO: When we delete a node, all connections with THIS node should get deleted too to not get miss-matched connection Dumping()
-
 namespace Graphs
 {
     public class Graph
@@ -22,29 +20,29 @@ namespace Graphs
 
         private List<Connection> connections = new List<Connection>();
 
-        public Graph(string node)
+        public Graph(string nodeName)
         {
             //We have to initialize the graph with at least ONE node.
-            AddNode(node);
+            AddNode(nodeName);
         }
 
         /// <summary>
         /// Call to add a new node in the list ONLY if it not already in the list.
         /// </summary>
-        /// <param name="node">The new node's name.</param>
-        public void AddNode(string node)
+        /// <param name="nodeName">The new node's name.</param>
+        public void AddNode(string nodeName)
         {
             PrintSeparators();
 
-            if (!IsNode(node))
+            if (!IsNode(nodeName))
             {
-                nodes.Add(node);
+                nodes.Add(nodeName);
 
-                Console.WriteLine($"Node {node} created in the nodes list.");
+                Console.WriteLine($"Node {nodeName} created in the nodes list.");
             }
             else
             {
-                Console.WriteLine($"Node {node.ToUpper()} already exists in the nodes list.");
+                Console.WriteLine($"Node {nodeName.ToUpper()} already exists in the nodes list.");
             }
         }
 
@@ -70,7 +68,7 @@ namespace Graphs
             if (_TryRemoveAtIndex(nodes, index))
             {
                 //Remove all connections between and towards this node.
-                _RemoveConnectionsWithNode(index);
+                //_RemoveConnectionsWithNode(index);
 
                 Console.WriteLine($"Node \"{node.ToUpper()}\" deleted.");
             }
@@ -84,7 +82,7 @@ namespace Graphs
         /// Call to remove all connections that connect OR are connected to the to-be-deleted node.
         /// </summary>
         /// <param name="index">Index of the to-be-deleted node.</param>
-        void _RemoveConnectionsWithNode(int index)
+        /*void _RemoveConnectionsWithNode(int index)
         {
             for (int i = 0; i < GetConnectionsCount(); i++)
             {
@@ -93,7 +91,7 @@ namespace Graphs
                     _TryRemoveAtIndex(connections, i);
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// Call to Try and remove the node at index "index".
@@ -138,25 +136,25 @@ namespace Graphs
         /// <summary>
         /// Call to create a new connection between from and to, ONLY if it does not already exist.
         /// </summary>
-        public void AddConnection(string from, string to)
+        public void AddConnection(string fromNode, string toNode)
         {
             PrintSeparators();
 
             //Early exit if the given strings do not match a node.
-            if (!IsNode(from) || !IsNode(to))
+            if (!IsNode(fromNode) || !IsNode(toNode))
             {
-                Console.WriteLine($"\tERROR: Invalid nodes passed \n\t{from} + {to}");
+                Console.WriteLine($"\tERROR: Invalid nodes passed for connection creation.\n\t{fromNode} + {toNode}");
                 return;
             }
             //Early exit if the connection already exists.
-            if (IsConnected(from, to))
+            if (IsConnected(fromNode, toNode))
             {
-                Console.WriteLine($"Connection from {from.ToUpper()} to {to.ToUpper()} already exists.");
+                Console.WriteLine($"Connection from {fromNode.ToUpper()} to {toNode.ToUpper()} already exists.");
                 return;
             }
 
-            int from_index = nodes.IndexOf(from);
-            int to_index = nodes.IndexOf(to);
+            int from_index = nodes.IndexOf(fromNode);
+            int to_index = nodes.IndexOf(toNode);
 
             //Create connection instance
             Connection newConnection = new Connection();
@@ -180,8 +178,8 @@ namespace Graphs
             { return; }
 
             //Grab the index of the nodes
-            int fromIndex = nodes.IndexOf(fromNode);
-            int toIndex = nodes.IndexOf(toNode);
+            int fromIndex = nodes.IndexOf(from);
+            int toIndex = nodes.IndexOf(to);
 
             //Itterate through the connections List and...
             for (int i = 0; i < GetConnectionsCount(); i++)
@@ -209,16 +207,16 @@ namespace Graphs
         }
 
         /// <returns>True if the connection exists inside the connections list, false if not.</returns>
-        public bool IsConnected(string from, string to)
+        public bool IsConnected(string fromNode, string toNode)
         {
             //EARLY EXIT if one of the supplied values is not a node
-            if (!IsNode(from) || !IsNode(to))
+            if (!IsNode(fromNode) || !IsNode(toNode))
             {
                 return false;
             }
 
-            int fromIndex = nodes.IndexOf(from);
-            int toIndex = nodes.IndexOf(to);
+            int fromIndex = nodes.IndexOf(fromNode);
+            int toIndex = nodes.IndexOf(toNode);
 
             for (int i = 0; i < GetConnectionsCount(); i++)
             {
@@ -235,10 +233,9 @@ namespace Graphs
         /// Call to check if the supplied connection ints match the from and to ints in both directions.
         /// </summary>
         /// <returns>True if the connection ints match the supplied ints, false otherwise.</returns>
-        bool _EvaluateConnection(Connection connection, int from, int to)
+        bool _EvaluateConnection(Connection connection, int fromIndex, int toIndex)
         {
-            if ((connection.from_index == from && connection.to_index == to)
-                || (connection.from_index == to && connection.to_index == from))
+            if ((connection.from_index == fromIndex && connection.to_index == toIndex))
             {
                 return true;
             }
@@ -317,6 +314,84 @@ namespace Graphs
             }
 
             Console.WriteLine("");
+        }
+
+        /// <summary>
+        /// Call to empty both the nodes and connections Lists
+        /// </summary>
+        public void Empty()
+        {
+            nodes = new List<string>();
+            connections = new List<Connection>();
+        }
+
+        public List<string> GetNeighbours(string node)
+        {
+            int from_index = nodes.IndexOf(node);
+
+            if (from_index == -1)
+            {
+                // TODO: throw error, exit...
+                return null;
+            }
+
+            List<string> neighbours = new List<string>();
+
+            foreach (Connection connection in connections)
+            {
+                if (connection.from_index == from_index)
+                {
+                    int to_index = connection.to_index;
+                    string neighbour = nodes[to_index];
+                    neighbours.Add(neighbour);
+                }
+            }
+
+            return neighbours;
+        }
+
+        public void DFSTraverse(string node)
+        {
+
+            // step 1: visit the node...
+            Console.WriteLine(node);
+
+            // step 2: find all neighbours of node...
+            List<string> neighbours = GetNeighbours(node);
+
+            // step 3: DFS traverse each one of the neighbours...
+            foreach (string neighbour in neighbours)
+            {
+                DFSTraverse(neighbour);
+            }
+        }
+
+        public void CreateSampleGraph()
+        {
+            //Clear the whole graph lists first
+            Empty();
+
+            //Create the nodes
+            AddNode("A");
+            AddNode("B");
+            AddNode("C");
+            AddNode("D");
+            AddNode("E");
+            AddNode("F");
+
+            //Create the connections
+            AddConnection("A", "B");
+            AddConnection("B", "C");
+            AddConnection("C", "F");
+
+            AddConnection("B", "D");
+            AddConnection("D", "E");
+            AddConnection("E", "F");
+
+            //Uncomment to create stackOverflow exception
+            //AddConnection("F", "E");
+
+            DFSTraverse("A");
         }
     }
 }
