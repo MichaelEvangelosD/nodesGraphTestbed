@@ -34,6 +34,8 @@ namespace Graphs
         /// <param name="node">The new node's name.</param>
         public void AddNode(string node)
         {
+            PrintSeparators();
+
             if (!IsNode(node))
             {
                 nodes.Add(node);
@@ -42,16 +44,19 @@ namespace Graphs
             }
             else
             {
-                Console.WriteLine($"Node {node} already exists in the nodes list.");
+                Console.WriteLine($"Node {node.ToUpper()} already exists in the nodes list.");
             }
         }
 
+        #region Node_Deletion
         /// <summary>
         /// Call to delete a node from the nodes List with the supplied name.
         /// </summary>
         /// <param name="node">Name of the node to delete</param>
         public void RemoveNode(string node)
         {
+            PrintSeparators();
+
             if (!IsNode(node))
             {
                 Console.WriteLine($"{node} does not exist in the nodes list.");
@@ -67,11 +72,11 @@ namespace Graphs
                 //Remove all connections between and towards this node.
                 _RemoveConnectionsWithNode(index);
 
-                Console.WriteLine($"Node \"{node}\" deleted.");
+                Console.WriteLine($"Node \"{node.ToUpper()}\" deleted.");
             }
             else
             {
-                Console.WriteLine($"Node \"{node}\" could not be deleted.");
+                Console.WriteLine($"Node \"{node.ToUpper()}\" could not be deleted.");
             }
         }
 
@@ -127,19 +132,26 @@ namespace Graphs
 
             return true;
         }
+        #endregion
 
+        #region Node_Connecting
         /// <summary>
         /// Call to create a new connection between from and to, ONLY if it does not already exist.
         /// </summary>
         public void AddConnection(string from, string to)
         {
-            //Early exit if the given strings do not match a node.
-            if (!IsNode(from) || !IsNode(to)) return;
+            PrintSeparators();
 
+            //Early exit if the given strings do not match a node.
+            if (!IsNode(from) || !IsNode(to))
+            {
+                Console.WriteLine($"\tERROR: Invalid nodes passed \n\t{from} + {to}");
+                return;
+            }
             //Early exit if the connection already exists.
             if (IsConnected(from, to))
             {
-                Console.WriteLine($"Connection from {from} to {to} already exists.");
+                Console.WriteLine($"Connection from {from.ToUpper()} to {to.ToUpper()} already exists.");
                 return;
             }
 
@@ -155,15 +167,21 @@ namespace Graphs
             connections.Add(newConnection);
         }
 
-        public void RemoveConnection(string from, string to)
+        /// <summary>
+        /// Call to check if the given parameters ARE nodes and then 
+        /// remove the connection that corresponds to them.
+        /// </summary>
+        public void RemoveConnection(string fromNode, string toNode)
         {
+            PrintSeparators();
+
             //Early exit if one or both of the supplied strings is not a node
-            if (!IsNode(from) || !IsNode(to))
+            if (!IsNode(fromNode) || !IsNode(toNode))
             { return; }
 
             //Grab the index of the nodes
-            int fromIndex = nodes.IndexOf(from);
-            int toIndex = nodes.IndexOf(to);
+            int fromIndex = nodes.IndexOf(fromNode);
+            int toIndex = nodes.IndexOf(toNode);
 
             //Itterate through the connections List and...
             for (int i = 0; i < GetConnectionsCount(); i++)
@@ -173,15 +191,17 @@ namespace Graphs
                 {
                     //Remove it
                     connections.RemoveAt(i);
-                    Console.WriteLine($"Connection {from} to {to} deleted.");
+                    Console.WriteLine($"Connection {fromNode} to {toNode} deleted.");
                     return;
                 }
             }
 
             //Writes this in the console if we did NOT find the supplied connection.
-            Console.WriteLine($"Connection {from} to {to} could not be found.");
+            Console.WriteLine($"Connection {fromNode} to {toNode} could not be found.");
         }
+        #endregion
 
+        #region Node_Validation
         /// <returns>True if the node exists inside the nodes list, false if not.</returns>
         public bool IsNode(string node)
         {
@@ -227,7 +247,9 @@ namespace Graphs
                 return false;
             }
         }
+        #endregion
 
+        #region Node_Counting
         /// <returns>The nodes List element count.</returns>
         public int GetNodeCount()
         {
@@ -239,7 +261,9 @@ namespace Graphs
         {
             return connections.Count;
         }
+        #endregion
 
+        #region Graph_InfoDumping
         /// <summary>
         /// Call to write all the nodes and node connections info to the console.
         /// </summary>
@@ -282,6 +306,17 @@ namespace Graphs
 
                 Console.WriteLine($"{i + 1}: {nodes[fromIndex]} connects to {nodes[toIndex]}");
             }
+        }
+        #endregion
+
+        void PrintSeparators()
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                Console.Write("-");
+            }
+
+            Console.WriteLine("");
         }
     }
 }
