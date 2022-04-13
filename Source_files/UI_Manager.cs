@@ -86,17 +86,23 @@ namespace NodeGraphTestbed_lists
             graph.CreateSampleGraph();
             graph.Dump();
 
-            Console.Write("DFS-R:\t");
+            //DO NOT UNCOMMENT XD
+            /*Console.Write("DFS-R:\t");
             DFSTraverser.DFSTraverse_Recursive(graph, "A");
             Console.ReadKey();
             Console.WriteLine();
 
             Console.Write("DFS-NR:\t");
             DFSTraverser.DFSTraverse_NonRecursive(graph, "A");
+            Console.ReadKey();*/
+
+            Console.WriteLine();
+            Console.Write("BFS-NR:\t");
+            BFSTraverser.BFSTraverse_NonRecursive(graph, "A");
             Console.ReadKey();
 
             Console.WriteLine();
-            Console.Write("BFS-G (Goal F):\t");
+            Console.Write("BFS-G (Goal ):\t");
             BFSTraverser.BFSTraverse_Goal(graph, "A", "F");
             Console.ReadKey();
         }

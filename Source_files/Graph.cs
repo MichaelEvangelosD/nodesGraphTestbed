@@ -400,7 +400,7 @@ namespace Graphs
             AddConnection("B", "E");
 
             //Uncomment to create stackOverflow exception
-            //AddConnection("D", "A");
+            AddConnection("D", "A");
         }
     }
 }
