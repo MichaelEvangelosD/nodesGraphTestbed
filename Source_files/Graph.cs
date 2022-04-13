@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace Graphs
 {
     public class Graph
@@ -344,10 +343,19 @@ namespace Graphs
         /// </summary>
         public void Empty()
         {
+            //string tempStr = nodes[0];
+
             nodes = new List<string>();
             connections = new List<Connection>();
+
+            //nodes.Add(tempStr);
         }
 
+        /// <summary>
+        /// Call to get all the child nodes of the passed node parameter
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public List<string> GetNeighbours(string node)
         {
             int from_index = nodes.IndexOf(node);
@@ -399,7 +407,7 @@ namespace Graphs
             AddConnection("A", "G");
             AddConnection("B", "E");
 
-            //Uncomment to create stackOverflow exception
+            //Cycle connection...
             AddConnection("D", "A");
         }
     }

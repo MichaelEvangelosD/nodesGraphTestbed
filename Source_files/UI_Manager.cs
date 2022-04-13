@@ -97,13 +97,13 @@ namespace NodeGraphTestbed_lists
             Console.ReadKey();*/
 
             Console.WriteLine();
-            Console.Write("BFS-NR:\t");
-            BFSTraverser.BFSTraverse_NonRecursive(graph, "A");
+            Console.Write("BFS-FailSafe (No Goal):\t");
+            BFSTraverser.BFSTraverse(graph, "A");
             Console.ReadKey();
 
             Console.WriteLine();
-            Console.Write("BFS-G (Goal ):\t");
-            BFSTraverser.BFSTraverse_Goal(graph, "A", "F");
+            Console.Write("BFS-G (With Goal):\t");
+            BFSTraverser.BFS(graph, "A", "D");
             Console.ReadKey();
         }
 
