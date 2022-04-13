@@ -96,8 +96,8 @@ namespace NodeGraphTestbed_lists
             Console.ReadKey();
 
             Console.WriteLine();
-            Console.Write("BFS-NR:\t");
-            BFSTraverser.BFSTraverse_NonRecursive(graph, "A");
+            Console.Write("BFS-G (Goal F):\t");
+            BFSTraverser.BFSTraverse_Goal(graph, "A", "F");
             Console.ReadKey();
         }
 

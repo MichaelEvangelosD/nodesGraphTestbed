@@ -163,7 +163,7 @@ namespace Graphs
             newConnection.from_index = from_index;
             newConnection.to_index = to_index;
 
-             connections.Add(newConnection);
+            connections.Add(newConnection);
 
             Console.WriteLine($"Created connection from {fromNode} to {toNode}");
         }
@@ -305,7 +305,7 @@ namespace Graphs
                 toIndex = connections[i].to_index;
 
                 //Check if the index is out of list range due to node deletion
-                if(!_TryIsNodeWithIndex(fromIndex) || !_TryIsNodeWithIndex(toIndex))
+                if (!_TryIsNodeWithIndex(fromIndex) || !_TryIsNodeWithIndex(toIndex))
                 { continue; }
 
                 Console.WriteLine($"{i + 1}: {nodes[fromIndex]} connects to {nodes[toIndex]}");
@@ -374,7 +374,6 @@ namespace Graphs
         }
         #endregion
 
-        
         public void CreateSampleGraph()
         {
             //Clear the whole graph lists first
@@ -401,7 +400,7 @@ namespace Graphs
             AddConnection("B", "E");
 
             //Uncomment to create stackOverflow exception
-            //AddConnection("F", "E");
+            //AddConnection("D", "A");
         }
     }
 }
