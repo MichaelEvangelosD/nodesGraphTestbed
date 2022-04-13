@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graphs.DFSTraverse;
+
 
 namespace Graphs
 {
@@ -269,14 +269,14 @@ namespace Graphs
         /// </summary>
         public void Dump()
         {
-            _PrintNodes();
-            _PrintNodeConnections();
+            _PrintNodes(nodes);
+            _PrintNodeConnections(connections);
         }
 
         /// <summary>
         /// Prints the nodes list elements to the console.
         /// </summary>
-        void _PrintNodes()
+        void _PrintNodes(List<string> nodesList)
         {
             int nodeCount = GetNodeCount();
 
@@ -291,9 +291,9 @@ namespace Graphs
         /// <summary>
         /// Prints the connections list elements to the console.
         /// </summary>
-        void _PrintNodeConnections()
+        void _PrintNodeConnections(List<Connection> connectionsList)
         {
-            int nodeConnectionsCount = GetConnectionsCount();
+            int nodeConnectionsCount = connectionsList.Count;
 
             Console.WriteLine($"Total connections in the list: {nodeConnectionsCount}");
 
@@ -304,8 +304,27 @@ namespace Graphs
                 fromIndex = connections[i].from_index;
                 toIndex = connections[i].to_index;
 
+                //Check if the index is out of list range due to node deletion
+                if(!_TryIsNodeWithIndex(fromIndex) || !_TryIsNodeWithIndex(toIndex))
+                { continue; }
+
                 Console.WriteLine($"{i + 1}: {nodes[fromIndex]} connects to {nodes[toIndex]}");
             }
+        }
+
+        bool _TryIsNodeWithIndex(int index)
+        {
+            try
+            {
+                IsNode(nodes[index]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
+                throw;
+            }
+
+            return true;
         }
         #endregion
 
@@ -368,21 +387,21 @@ namespace Graphs
             AddNode("D");
             AddNode("E");
             AddNode("F");
+            AddNode("G");
 
             //Create the connections
             AddConnection("A", "B");
             AddConnection("B", "C");
             AddConnection("C", "F");
-
-            AddConnection("B", "D");
-            AddConnection("D", "E");
-            AddConnection("E", "F");
+            AddConnection("F", "G");
+            AddConnection("F", "E");
+            AddConnection("E", "D");
+            AddConnection("D", "G");
+            AddConnection("A", "G");
+            AddConnection("B", "E");
 
             //Uncomment to create stackOverflow exception
             //AddConnection("F", "E");
-
-            //Begin traversing the given graph
-            DFSTraverser.DFSTraverse(graph: this,"A");
         }
     }
 }

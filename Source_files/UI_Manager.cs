@@ -1,5 +1,7 @@
 ﻿using System;
 using Graphs;
+using Graphs.DFSTraverse;
+using Graphs.BFSTraverse;
 
 namespace NodeGraphTestbed_lists
 {
@@ -36,7 +38,7 @@ namespace NodeGraphTestbed_lists
             }
             */
 
-            //Graph creation - Pass
+            /*//Graph creation - Pass
             Graph graph = new Graph("banana");
 
             Console.ReadKey();
@@ -62,24 +64,40 @@ namespace NodeGraphTestbed_lists
             Console.ReadKey();
 
             graph.AddConnection("Pireus", "glyfada");
+            Console.ReadKey();
 
-            /*//Node deletion - Pass
+            //Node deletion - Pass
             graph.RemoveNode("glyfada");
             Console.ReadKey();
 
             //Connection is removed - Pass
             graph.RemoveConnection("banana", "glyfada");
-            Console.ReadKey();*/
+            Console.ReadKey();
 
             //Correct info dumping - Pass
             graph.Dump();
             Console.ReadKey();
+            */
+
+            Graph graph = new Graph("");
 
             graph.Empty();
 
             graph.CreateSampleGraph();
             graph.Dump();
 
+            Console.Write("DFS-R:\t");
+            DFSTraverser.DFSTraverse_Recursive(graph, "A");
+            Console.ReadKey();
+            Console.WriteLine();
+
+            Console.Write("DFS-NR:\t");
+            DFSTraverser.DFSTraverse_NonRecursive(graph, "A");
+            Console.ReadKey();
+
+            Console.WriteLine();
+            Console.Write("BFS-NR:\t");
+            BFSTraverser.BFSTraverse_NonRecursive(graph, "A");
             Console.ReadKey();
         }
 
