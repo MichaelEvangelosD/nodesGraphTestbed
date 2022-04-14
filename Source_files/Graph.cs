@@ -269,7 +269,12 @@ namespace Graphs
         public void Dump()
         {
             _PrintNodes(nodes);
+
+            PrintSeparators();
+
             _PrintNodeConnections(connections);
+
+            PrintSeparators();
         }
 
         /// <summary>
@@ -398,7 +403,6 @@ namespace Graphs
 
             //Create the connections
             AddConnection("A", "B");
-            AddConnection("B", "C");
             AddConnection("C", "F");
             AddConnection("F", "G");
             AddConnection("F", "E");
@@ -409,6 +413,7 @@ namespace Graphs
 
             //Cycle connection...
             AddConnection("D", "A");
+            AddConnection("G", "D");
         }
     }
 }

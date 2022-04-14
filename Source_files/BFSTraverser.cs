@@ -49,7 +49,7 @@ namespace Graphs.BFSTraverse
             }
         }
 
-        public static void BFS(Graph graph, string startingNode, string goalNode)
+        /*public static void BFS(Graph graph, string startingNode, string goalNode)
         {
             //Fast return if the starting node does not exist in the node graph
             if (!graph.IsNode(startingNode))
@@ -93,6 +93,101 @@ namespace Graphs.BFSTraverse
             }
 
             Console.WriteLine("\nNode was not found");
+        }*/
+
+        /// <summary>
+        /// Call to check if THERE IS an available path from startingNode towards the goalNode
+        /// </summary>
+        public static bool BFSConfirmPath(Graph graph, string startingNode, string goalNode)
+        {
+            //Fast return if the starting node does not exist in the node graph
+            if (!graph.IsNode(startingNode))
+            {
+                return false;
+            }
+
+            //Fast return if the starting node is the goal node
+            if (startingNode.Equals(goalNode))
+            {
+                return false;
+            }
+
+            Queue<string> openSet = new Queue<string>();
+            List<string> closedSet = new List<string>();
+
+            openSet.Enqueue(startingNode);
+
+            while (openSet.Count != 0)
+            {
+                string currentNode = openSet.Dequeue();
+
+                List<string> childNodes = graph.GetNeighbours(currentNode);
+
+                foreach (string child in childNodes)
+                {
+                    if (child.Equals(goalNode))
+                    {
+                        return false;
+                    }
+
+                    if (!closedSet.Contains(child))
+                    {
+                        closedSet.Add(child);
+                        openSet.Enqueue(child);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public class  Step
+        {
+            public string nodeName;
+            public Step previousStep;
+        }
+
+        public static List<string> BFSFindPath(Graph graph, string startingNode,string toNode )
+        {
+            //Fast return if the starting node does not exist in the node graph
+            if (!graph.IsNode(startingNode))
+            {
+                return null;
+            }
+
+            //Fast return if the starting node is the goal node
+            if (startingNode.Equals(toNode))
+            {
+                return null;
+            }
+
+            List<string> path = new List<string>();
+            Queue<Step> openSet = new Queue<Step>();
+            List<string> closedSet = new List<string>();
+
+            /*
+             * We begin with a step that points towards nothing behind it,
+             * thus is the first step on the Search Tree
+             */
+            Step startingStep = new Step();
+            startingStep.nodeName = startingNode;
+            startingStep.previousStep = null;
+
+            openSet.Enqueue(startingStep);
+
+            while (openSet.Count != 0)
+            {
+                Step currentStep = openSet.Dequeue();
+
+                string currentNode = currentStep.nodeName;
+
+                if(!closedSet.Contains(currentNode))
+                {
+                    //CONTINUE HERE
+                }
+            }
+
+            return path;
         }
     }
 }
