@@ -1,2 +1,2 @@
-# nodesGraphTestbed_lists
-The previously made node-graph app made with Lists&lt;>.
+# nodesGraphTestbed
+The previously made node-graph app frequently updated to reflect the lecture material.
