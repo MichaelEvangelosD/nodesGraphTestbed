@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Graphs;
 using Graphs.DFSTraverse;
 using Graphs.BFSTraverse;
@@ -19,14 +20,30 @@ namespace NodeGraphTestbed_lists
             Console.WriteLine();
             Console.Write("BFS:\t");
             BFSTraverser.BFSTraverse(graph, "A");
+            Console.WriteLine();
             Console.ReadKey();
 
-            bool pathPossible = BFSTraverser.BFSConfirmPath(graph, "A", "D");
+            string from = "A";
+            string to = "G";
 
-            if(pathPossible)
+            bool pathPossible = BFSTraverser.BFSConfirmPath(graph, from, to);
+
+            Console.WriteLine($"{from} -> {to}: {pathPossible}");
+
+            if (pathPossible)
             {
-                BFSTraverser.BFSFindPath();
+
+                List<string> pathfinding = BFSTraverser.BFSFindPath(graph, from, to);
+
+                Console.WriteLine($"Pathfinding of {from} -> {to}");
+                foreach (string step in pathfinding)
+                {
+                    Console.Write(step);
+                    Console.Write(" ");
+                }
             }
+
+            Console.ReadKey();
         }
 
         static void Main(string[] args)

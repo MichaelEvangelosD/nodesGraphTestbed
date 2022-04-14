@@ -127,7 +127,7 @@ namespace Graphs.BFSTraverse
                 {
                     if (child.Equals(goalNode))
                     {
-                        return false;
+                        return true;
                     }
 
                     if (!closedSet.Contains(child))
@@ -141,13 +141,7 @@ namespace Graphs.BFSTraverse
             return false;
         }
 
-        public class  Step
-        {
-            public string nodeName;
-            public Step previousStep;
-        }
-
-        public static List<string> BFSFindPath(Graph graph, string startingNode,string toNode )
+        public static List<string> BFSFindPath(Graph graph, string startingNode, string toNode)
         {
             //Fast return if the starting node does not exist in the node graph
             if (!graph.IsNode(startingNode))
@@ -155,13 +149,15 @@ namespace Graphs.BFSTraverse
                 return null;
             }
 
+            List<string> path = new List<string>();
+
             //Fast return if the starting node is the goal node
             if (startingNode.Equals(toNode))
             {
-                return null;
+                path.Add(startingNode);
+                return path;
             }
 
-            List<string> path = new List<string>();
             Queue<Step> openSet = new Queue<Step>();
             List<string> closedSet = new List<string>();
 
@@ -181,12 +177,42 @@ namespace Graphs.BFSTraverse
 
                 string currentNode = currentStep.nodeName;
 
-                if(!closedSet.Contains(currentNode))
+                if (closedSet.Contains(currentNode))
+                { continue; }
+
+                //Add the current node to the visited list so we don't have cycles
+                closedSet.Add(currentNode);
+
+                //We found the goal node - Backtrack to the tree root
+                if (currentNode.Equals(toNode))
                 {
-                    //CONTINUE HERE
+                    Step pathStep = currentStep;
+
+                    while (pathStep != null)
+                    {
+                        path.Add(pathStep.nodeName); //Add the node name to the path list
+                        pathStep = pathStep.previousStep; //Set the past step to the previous step
+                    }
+
+                    //Return the now filled path list
+                    return path;
+                }
+
+                //Continue to the next node
+                List<string> childNodes = graph.GetNeighbours(currentNode);
+
+                //For each child node...
+                foreach (string childNode in childNodes)
+                {
+                    Step nextStep = new Step(); //Create a new step...
+                    nextStep.nodeName = childNode; //With the name of the child node...
+                    nextStep.previousStep = currentStep; //And set it's previous step to the current step...
+
+                    openSet.Enqueue(nextStep); //Then add it to the openset
                 }
             }
 
+            //Return the (may) empty path list
             return path;
         }
     }

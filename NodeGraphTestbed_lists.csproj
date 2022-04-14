@@ -46,6 +46,7 @@
     <Compile Include="Source_files\BFSTraverser.cs" />
     <Compile Include="Source_files\DFSTraverser.cs" />
     <Compile Include="Source_files\Graph.cs" />
+    <Compile Include="Source_files\Step.cs" />
     <Compile Include="Source_files\UI_Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
