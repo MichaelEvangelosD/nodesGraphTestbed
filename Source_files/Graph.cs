@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graphs
+namespace GraphSearch
 {
     public class Graph
     {
@@ -403,6 +403,10 @@ namespace Graphs
 
             //Create the connections
             AddConnection("A", "B");
+
+            //Comment out to create 2 separate Search Trees in the same graph
+            AddConnection("B", "C");
+
             AddConnection("C", "F");
             AddConnection("F", "G");
             AddConnection("F", "E");
@@ -411,7 +415,7 @@ namespace Graphs
             AddConnection("A", "G");
             AddConnection("B", "E");
 
-            //Cycle connection...
+            //Cycle connections...(B->C must be commented out to create correct cycle)
             AddConnection("D", "A");
             AddConnection("G", "D");
         }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graphs.DFSTraverse
+namespace GraphSearch.DFS
 {
-    static class DFSTraverser
+    static class DFS
     {
         public static void DFSTraverse_R(Graph graph, string startingNode)
         {
@@ -46,6 +46,9 @@ namespace Graphs.DFSTraverse
             }
         }
 
+        //- Basically a modified version of BFS -
+        //If you change the Queue<> to a Stack<>
+        //then the BFS behaves like a DFS.
         public static void DFSTraverse_NR_Stack(Graph graph, string startingNode)
         {
             Stack<string> openset = new Stack<string>();

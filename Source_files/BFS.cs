@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graphs.BFSTraverse
+namespace GraphSearch.BFS
 {
-    class BFSTraverser
+    class BFS
     {
+        /// <summary>
+        /// Call to visit and print all the nodes contained inside the passed graph.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="startingNode"></param>
         public static void BFSTraverse(Graph graph, string startingNode)
         {
             //Fast return if the node doesn't exists in the node graph.
@@ -48,52 +53,6 @@ namespace Graphs.BFSTraverse
                 }
             }
         }
-
-        /*public static void BFS(Graph graph, string startingNode, string goalNode)
-        {
-            //Fast return if the starting node does not exist in the node graph
-            if (!graph.IsNode(startingNode))
-            {
-                Console.WriteLine($"Node: {startingNode} not present in node graph.");
-                return;
-            }
-
-            //Fast return if the starting node is the goal node
-            if (startingNode.Equals(goalNode))
-                return;
-
-            Queue<string> openset = new Queue<string>();
-            List<string> visited = new List<string>();
-
-            openset.Enqueue(startingNode);
-
-            while (openset.Count != 0)
-            {
-                string currentNode = openset.Dequeue();
-
-                Console.Write(currentNode);
-                Console.Write(" ");
-
-                List<string> childNodes = graph.GetNeighbours(currentNode);
-
-                foreach (string child in childNodes)
-                {
-                    if (child.Equals(goalNode))
-                    {
-                        Console.WriteLine($"\nNode {goalNode} found!");
-                        return;
-                    }
-
-                    if (!visited.Contains(child))
-                    {
-                        visited.Add(child);
-                        openset.Enqueue(child);
-                    }
-                }
-            }
-
-            Console.WriteLine("\nNode was not found");
-        }*/
 
         /// <summary>
         /// Call to check if THERE IS an available path from startingNode towards the goalNode
@@ -141,7 +100,14 @@ namespace Graphs.BFSTraverse
             return false;
         }
 
-        public static List<string> BFSFindPath(Graph graph, string startingNode, string toNode)
+        /// <summary>
+        /// Call to get a possible path starting from the startingNode towards the toNode.
+        /// </summary>
+        /// <returns>A List containing the names of the nodes before the toNode (IF FOUND).
+        /// <para>Returns a List of count 1 if the startingNode is the toNode.</para>
+        /// <para>Returns null if the startingNode does not exist inside the passed graph.</para>
+        /// <para>Returns an empty list if the goal node was not found.</para></returns>
+        public static List<string> BFSPathfind(Graph graph, string startingNode, string toNode)
         {
             //Fast return if the starting node does not exist in the node graph
             if (!graph.IsNode(startingNode))
@@ -158,16 +124,17 @@ namespace Graphs.BFSTraverse
                 return path;
             }
 
+            //Create the necessary collections
             Queue<Step> openSet = new Queue<Step>();
             List<string> closedSet = new List<string>();
 
             /*
              * We begin with a step that points towards nothing behind it,
-             * thus is the first step on the Search Tree
+             * thus is the first step on the Search Tree.
              */
             Step startingStep = new Step();
             startingStep.nodeName = startingNode;
-            startingStep.previousStep = null;
+            startingStep.previousStep = null; //null is used to check if we are in the last node...
 
             openSet.Enqueue(startingStep);
 
@@ -177,6 +144,7 @@ namespace Graphs.BFSTraverse
 
                 string currentNode = currentStep.nodeName;
 
+                //If we've already passed this node, this time bypass it
                 if (closedSet.Contains(currentNode))
                 { continue; }
 
@@ -186,8 +154,11 @@ namespace Graphs.BFSTraverse
                 //We found the goal node - Backtrack to the tree root
                 if (currentNode.Equals(toNode))
                 {
+                    //Get the current step...
                     Step pathStep = currentStep;
 
+                    //...and while we have not hit a null pathStep
+                    //continue adding each previous step to the path List
                     while (pathStep != null)
                     {
                         path.Add(pathStep.nodeName); //Add the node name to the path list
@@ -199,14 +170,15 @@ namespace Graphs.BFSTraverse
                 }
 
                 //Continue to the next node
-                List<string> childNodes = graph.GetNeighbours(currentNode);
+                //(If we are here this means we are still searching for the goal Node)
+                List<string> neighbours = graph.GetNeighbours(currentNode);
 
-                //For each child node...
-                foreach (string childNode in childNodes)
+                //For each child node of THIS node's neighbours...
+                foreach (string childNode in neighbours)
                 {
                     Step nextStep = new Step(); //Create a new step...
                     nextStep.nodeName = childNode; //With the name of the child node...
-                    nextStep.previousStep = currentStep; //And set it's previous step to the current step...
+                    nextStep.previousStep = currentStep; //And set it's PREVIOUS step to the CURRENT step...
 
                     openSet.Enqueue(nextStep); //Then add it to the openset
                 }
