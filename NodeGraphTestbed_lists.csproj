@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Source_files\BFS.cs" />
     <Compile Include="Source_files\DFS.cs" />
+    <Compile Include="Source_files\DFS_R.cs" />
     <Compile Include="Source_files\Graph.cs" />
     <Compile Include="Source_files\Step.cs" />
     <Compile Include="Source_files\UI_Manager.cs" />

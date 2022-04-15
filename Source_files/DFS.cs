@@ -5,73 +5,167 @@ namespace GraphSearch.DFS
 {
     static class DFS
     {
-        public static void DFSTraverse_R(Graph graph, string startingNode)
+        public static void DFSTraverse(Graph graph, string startingNode)
         {
-            // step 1: visit the node...
-            Console.Write(startingNode);
-            Console.Write(" ");
-
-            // step 2: find all neighbours of node...
-            List<string> neighbours = graph.GetNeighbours(startingNode);
-
-            // step 3: DFS traverse each one of the neighbours...
-            foreach (string neighbour in neighbours)
+            //Fast return if the node doesn't exists in the node graph.
+            if (!graph.IsNode(startingNode))
             {
-                DFSTraverse_R(graph, neighbour);
+                Console.WriteLine($"Node: {startingNode} not present in node graph.");
+                return;
             }
-        }
 
-        public static void DFSTraverse_NR_Queue(Graph graph, string startingNode)
-        {
-            Queue<string> openset = new Queue<string>();
+            Stack<string> openSet = new Stack<string>();
+            List<string> closedSet = new List<string>();
 
-            openset.Enqueue(startingNode); //insert the first node indo the openSet
+            openSet.Push(startingNode); //insert the first node into the openSet
 
-            while (openset.Count != 0)
+            while (openSet.Count != 0)
             {
                 //remove the currently visited node...
-                string currentNode = openset.Dequeue();
+                string currentNode = openSet.Pop();
 
                 //...and then print the visited node
                 Console.Write(currentNode);
                 Console.Write(" ");
+
+                //Checks if we've already visited this node and bypasses it.
+                if (closedSet.Contains(currentNode))
+                { continue; }
+
+                closedSet.Add(currentNode);
 
                 //get the children nodes of the currently traversed node
                 List<string> childNodes = graph.GetNeighbours(currentNode);
 
                 foreach (string child in childNodes)
                 {
-                    openset.Enqueue(child);
+                    openSet.Push(child);
                 }
             }
         }
 
-        //- Basically a modified version of BFS -
-        //If you change the Queue<> to a Stack<>
-        //then the BFS behaves like a DFS.
-        public static void DFSTraverse_NR_Stack(Graph graph, string startingNode)
+        public static bool DFSConfirmPath(Graph graph, string startingNode, string goalNode)
         {
-            Stack<string> openset = new Stack<string>();
-
-            openset.Push(startingNode); //insert the first node indo the openSet
-
-            while (openset.Count != 0)
+            //Fast return if the starting node does not exist in the node graph
+            if (!graph.IsNode(startingNode))
             {
-                //remove the currently visited node...
-                string currentNode = openset.Pop();
+                return false;
+            }
 
-                //...and then print the visited node
-                Console.Write(currentNode);
-                Console.Write(" ");
+            //Fast return if the starting node is the goal node
+            if (startingNode.Equals(goalNode))
+            {
+                return false;
+            }
 
-                //get the children nodes of the currently traversed node
+            Stack<string> openSet = new Stack<string>();
+            List<string> closedSet = new List<string>();
+
+            openSet.Push(startingNode);
+
+            while (openSet.Count != 0)
+            {
+                string currentNode = openSet.Pop();
+
                 List<string> childNodes = graph.GetNeighbours(currentNode);
 
                 foreach (string child in childNodes)
                 {
-                    openset.Push(child);
+                    if (child.Equals(goalNode))
+                    {
+                        return true;
+                    }
+
+                    if (!closedSet.Contains(child))
+                    {
+                        closedSet.Add(child);
+                        openSet.Push(child);
+                    }
                 }
             }
+
+            return false;
+        }
+
+        public static List<string> DFSPathfind(Graph graph, string startingNode, string toNode)
+        {
+            //Fast return if the starting node does not exist in the node graph
+            if (!graph.IsNode(startingNode))
+            {
+                return null;
+            }
+
+            List<string> path = new List<string>();
+
+            //Fast return if the starting node is the goal node
+            if (startingNode.Equals(toNode))
+            {
+                path.Add(startingNode);
+                return path;
+            }
+
+            //Create the necessary collections
+            Stack<Step> openSet = new Stack<Step>();
+            List<string> closedSet = new List<string>();
+
+            /*
+             * We begin with a step that points towards nothing behind it,
+             * thus is the first step on the Search Tree.
+             */
+            Step startingStep = new Step();
+            startingStep.nodeName = startingNode;
+            startingStep.previousStep = null; //null is used to check if we are in the last node...
+
+            openSet.Push(startingStep);
+
+            while (openSet.Count != 0)
+            {
+                Step currentStep = openSet.Pop();
+
+                string currentNode = currentStep.nodeName;
+
+                //If we've already passed this node, this time bypass it
+                if (closedSet.Contains(currentNode))
+                { continue; }
+
+                //Add the current node to the visited list so we don't have cycles
+                closedSet.Add(currentNode);
+
+                //We found the goal node - Backtrack to the tree root
+                if (currentNode.Equals(toNode))
+                {
+                    //Get the current step...
+                    Step pathStep = currentStep;
+
+                    //...and while we have not hit a null pathStep
+                    //continue adding each previous step to the path List
+                    while (pathStep != null)
+                    {
+                        path.Add(pathStep.nodeName); //Add the node name to the path list
+                        pathStep = pathStep.previousStep; //Set the past step to the previous step
+                    }
+
+                    //Return the now filled path list
+                    return path;
+                }
+
+                //Continue to the next node
+                //(If we are here this means we are still searching for the goal Node)
+                List<string> neighbours = graph.GetNeighbours(currentNode);
+
+                //For each child node of THIS node's neighbours...
+                foreach (string childNode in neighbours)
+                {
+                    Step nextStep = new Step(); //Create a new step...
+                    nextStep.nodeName = childNode; //With the name of the child node...
+                    nextStep.previousStep = currentStep; //And set it's PREVIOUS step to the CURRENT step...
+
+                    openSet.Push(nextStep); //Then add it to the openset
+                }
+            }
+
+            //Return the (may) empty path list
+            return path;
         }
     }
 }

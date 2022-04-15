@@ -415,9 +415,9 @@ namespace GraphSearch
             AddConnection("A", "G");
             AddConnection("B", "E");
 
-            //Cycle connections...(B->C must be commented out to create correct cycle)
-            AddConnection("D", "A");
-            AddConnection("G", "D");
+            //Cycle connections...
+            //AddConnection("D", "A");
+            //AddConnection("G", "D");
         }
     }
 }

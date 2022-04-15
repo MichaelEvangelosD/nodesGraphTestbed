@@ -20,26 +20,25 @@ namespace GraphSearch.BFS
             }
 
             //Create the necessary collections
-            Queue<string> openset = new Queue<string>();
-            List<string> visited = new List<string>(); //Keeps track of the visited nodes so we don't visit them again
+            Queue<string> openSet = new Queue<string>();
+            List<string> closedSet = new List<string>(); //Keeps track of the visited nodes so we don't visit them again
 
-            openset.Enqueue(startingNode); //insert the first node into the openSet
+            openSet.Enqueue(startingNode); //insert the first node into the openSet
 
-            while (openset.Count != 0)
+            while (openSet.Count != 0)
             {
                 //remove the currently traversed node
-                string currentNode = openset.Dequeue();
+                string currentNode = openSet.Dequeue();
 
                 //Checks if we've already visited this node and bypasses it...
-                if (visited.Contains(currentNode))
-                {
-                    continue;
-                }
+                if (closedSet.Contains(currentNode))
+                { continue; }
 
                 //Add the curently visited node to the visited list
                 //so we don't end up doing cycles
-                visited.Add(currentNode);
+                closedSet.Add(currentNode);
 
+                //Print the visited node
                 Console.Write(currentNode);
                 Console.Write(" ");
 
@@ -49,7 +48,7 @@ namespace GraphSearch.BFS
                 foreach (string child in childNodes)
                 {
                     //Populate the collection with the next child nodes to search
-                    openset.Enqueue(child);
+                    openSet.Enqueue(child);
                 }
             }
         }

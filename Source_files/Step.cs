@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GraphSearch.BFS
+namespace GraphSearch
 {
     public class Step
     {
