@@ -4,7 +4,7 @@ using GraphSearch;
 using GraphSearch.DFS;
 using GraphSearch.BFS;
 
-namespace NodeGraphTestbed_lists
+namespace NodeGraphTestbed
 {
     public class UI_Manager
     {
