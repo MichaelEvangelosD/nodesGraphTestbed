@@ -363,6 +363,9 @@ namespace GraphSearch
         /// <returns></returns>
         public List<string> GetNeighbours(string node)
         {
+            if (!IsNode(node))
+                return null;
+
             int from_index = nodes.IndexOf(node);
 
             if (from_index == -1)
@@ -416,8 +419,8 @@ namespace GraphSearch
             AddConnection("B", "E");
 
             //Cycle connections...
-            //AddConnection("D", "A");
-            //AddConnection("G", "D");
+            AddConnection("D", "A");
+            AddConnection("G", "D");
         }
     }
 }

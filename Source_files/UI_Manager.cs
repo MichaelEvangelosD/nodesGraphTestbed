@@ -18,7 +18,7 @@ namespace NodeGraphTestbed
             //Initialize the graph
             Graph graph = new Graph("");
             string from = "A";
-            string to = "D";
+            string to = "G";
 
             //Populate the graph
             graph.CreateSampleGraph();
@@ -45,6 +45,7 @@ namespace NodeGraphTestbed
 
             #region DFS_TESTS
             Console.WriteLine("Start of DFS Tests");
+
             //Test 1
             Test_DFSTraverse_NR(graph, from);
 
@@ -62,8 +63,15 @@ namespace NodeGraphTestbed
 
             #region DFSR_TESTS
 
-            //TODO
+            Console.WriteLine("Start of DFSR Tests.");
 
+            //Test 1
+            Test_DFSRTraverse(graph, from);
+
+            //Test 2
+            Test_DFSRConfirmPath(graph, from, to);
+
+            //todo: Test 3 - Pathfind
             #endregion
         }
 
@@ -152,7 +160,22 @@ namespace NodeGraphTestbed
         #endregion
 
         #region DFSR_TEST_METHODS
+        void Test_DFSRTraverse(Graph graph, string startNode)
+        {
+            Console.WriteLine();
+            Console.Write("DFSR Traverse:\t");
+            DFS_R.DFSR_Traverse(graph, startNode);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
 
+        void Test_DFSRConfirmPath(Graph graph, string from, string to)
+        {
+            bool pathPossible = DFS_R.DFSR_PathConfirmation(graph, from, to);
+
+            Console.WriteLine($"Path Available {from} -> {to}: {pathPossible}");
+            Console.ReadKey();
+        }
         #endregion
     }
 }

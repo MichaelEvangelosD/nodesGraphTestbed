@@ -5,22 +5,68 @@ namespace GraphSearch.DFS
 {
     public static class DFS_R
     {
-        //TODO: Path-confirmation/finding
-        public static void DFSTraverse_R(Graph graph, string startingNode)
+        static List<string> closedSet = new List<string>();
+
+        public static void DFSR_Traverse(Graph graph, string from)
         {
-            // step 1: visit the node...
-            Console.Write(startingNode);
+            ClearClosedSet(ref closedSet);
+
+            _Traverse(graph, from);
+        }
+
+        static void _Traverse(Graph graph, string from)
+        {
+            Console.Write(from);
             Console.Write(" ");
 
-            // step 2: find all neighbours of node...
-            List<string> neighbours = graph.GetNeighbours(startingNode);
+            if (closedSet.Contains(from))
+                return;
 
-            // step 3: DFS traverse each one of the neighbours...
+            closedSet.Add(from);
+
+            List<string> neighbours = graph.GetNeighbours(from);
+
             foreach (string neighbour in neighbours)
             {
-                DFSTraverse_R(graph, neighbour);
+                _Traverse(graph, neighbour);
             }
         }
 
+        public static bool DFSR_PathConfirmation(Graph graph, string from, string goalNode)
+        {
+            ClearClosedSet(ref closedSet);
+
+            _PathConfirmation(graph, from, goalNode);
+
+            if (closedSet.Contains(goalNode))
+                return true;
+            else
+                return false;
+        }
+
+        static void _PathConfirmation(Graph graph, string from, string goalNode)
+        {
+            if (closedSet.Contains(goalNode))
+                return;
+
+            closedSet.Add(from);
+
+            List<string> neighbours = graph.GetNeighbours(from);
+
+            foreach (string neighbour in neighbours)
+            {
+                if (closedSet.Contains(neighbour))
+                    continue;
+
+                _PathConfirmation(graph, neighbour, goalNode);
+            }
+        }
+
+
+        //UTILITIES
+        static void ClearClosedSet(ref List<string> closedSet)
+        {
+            closedSet = new List<string>();
+        }
     }
 }
