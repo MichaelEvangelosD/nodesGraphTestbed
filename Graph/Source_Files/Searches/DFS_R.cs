@@ -11,6 +11,8 @@ namespace Graphs
         }
 
         List<string> closedSet = new List<string>();
+        Stack<Step> openSet = new Stack<Step>();
+        List<string> path = new List<string>();
 
         public void _DFSR_Traverse(Graph graph, string from)
         {
@@ -65,6 +67,61 @@ namespace Graphs
 
                 _PathConfirmation(graph, neighbour, goalNode);
             }
+        }
+
+
+        public List<string> _DFSRPathfind(Graph graph, string from, string to)
+        {
+            ClearClosedSet(ref closedSet);
+
+            if (!graph.IsNode(from))
+            {
+                return null;
+            }
+
+            if (from.Equals(to))
+            {
+                path.Add(from);
+                return path;
+            }
+
+            //Create the first step of the path
+            Step firstStep = new Step();
+            firstStep.nodeName = from;
+            firstStep.previousStep = null;
+            openSet.Push(firstStep);
+
+            return _Pathfind(to);
+        }
+
+        //TODO: FINISH
+        List<string> _Pathfind(string to)
+        {
+            Step currentStep = openSet.Pop();
+
+            string currentNode = currentStep.nodeName;
+
+            if (closedSet.Contains(currentNode))
+            { return null; }
+
+            closedSet.Add(currentNode);
+
+            /*if (currentNode.Equals(to))
+            {
+                //Get the current step...
+                Step pathStep = currentStep;
+
+                //...and while we have not hit a null pathStep
+                //continue adding each previous step to the path List
+                while (pathStep != null)
+                {
+                    path.Add(pathStep.nodeName); //Add the node name to the path list
+                    pathStep = pathStep.previousStep; //Set the past step to the previous step
+                }
+
+                //Return the now filled path list
+                return path;
+            }*/
         }
 
         //UTILITIES
