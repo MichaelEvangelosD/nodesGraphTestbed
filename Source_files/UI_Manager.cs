@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GraphSearch;
-using GraphSearch.DFS;
-using GraphSearch.BFS;
+using Graphs;
 
 namespace NodeGraphTestbed
 {
@@ -80,14 +78,14 @@ namespace NodeGraphTestbed
         {
             Console.WriteLine();
             Console.Write("BFS Traverse:\t");
-            BFS.BFSTraverse(graph, startNode);
+            graph.BFSTraverse(graph, startNode);
             Console.WriteLine();
             Console.ReadKey();
         }
 
         void Test_BFSConfirmPath(Graph graph, string from, string to)
         {
-            bool pathPossible = BFS.BFSConfirmPath(graph, from, to);
+            bool pathPossible = graph.BFSConfirmPath(graph, from, to);
 
             Console.WriteLine($"Path Available {from} -> {to}: {pathPossible}");
             Console.ReadKey();
@@ -95,7 +93,7 @@ namespace NodeGraphTestbed
 
         void Test_BFSPathfind(Graph graph, string from, string to)
         {
-            List<string> pathfinding = BFS.BFSPathfind(graph, from, to);
+            List<string> pathfinding = graph.BFSPathfind(graph, from, to);
 
             Console.WriteLine($"Pathfinding of {from} -> {to} " +
                 $"(Should be printed reversed)");
@@ -122,14 +120,14 @@ namespace NodeGraphTestbed
         {
             Console.WriteLine();
             Console.Write("DFS Traverse:\t");
-            DFS.DFSTraverse(graph, from);
+            graph.DFSTraverse(graph, from);
             Console.WriteLine();
             Console.ReadKey();
         }
 
         void Test_DFSConfirmPath(Graph graph, string from, string to)
         {
-            bool pathPossible = DFS.DFSConfirmPath(graph, from, to);
+            bool pathPossible = graph.DFSConfirmPath(graph, from, to);
 
             Console.WriteLine($"Path Available {from} -> {to}: {pathPossible}");
             Console.ReadKey();
@@ -137,7 +135,7 @@ namespace NodeGraphTestbed
 
         void Test_DFSPathfind(Graph graph, string from, string to)
         {
-            List<string> pathfinding = DFS.DFSPathfind(graph, from, to);
+            List<string> pathfinding = graph.DFSPathfind(graph, from, to);
 
             Console.WriteLine($"Pathfinding of {from} -> {to} " +
                 $"(Should be printed reversed)");
@@ -164,18 +162,20 @@ namespace NodeGraphTestbed
         {
             Console.WriteLine();
             Console.Write("DFSR Traverse:\t");
-            DFS_R.DFSR_Traverse(graph, startNode);
+            graph.DFSR_Traverse(graph, startNode);
             Console.WriteLine();
             Console.ReadKey();
         }
 
         void Test_DFSRConfirmPath(Graph graph, string from, string to)
         {
-            bool pathPossible = DFS_R.DFSR_PathConfirmation(graph, from, to);
+            bool pathPossible = graph.DFSRPathConfirm(graph, from, to);
 
             Console.WriteLine($"Path Available {from} -> {to}: {pathPossible}");
             Console.ReadKey();
         }
+
+        //TODO PATHFIND
         #endregion
     }
 }

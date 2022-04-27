@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodeGraphTestbed", "NodeGraphTestbed.csproj", "{467FB2AC-41E4-405D-A5DD-FDF098917FCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "..\Graph\Graph.csproj", "{0CF69567-B73C-4774-B756-AB11202D46B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{467FB2AC-41E4-405D-A5DD-FDF098917FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{467FB2AC-41E4-405D-A5DD-FDF098917FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{467FB2AC-41E4-405D-A5DD-FDF098917FCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CF69567-B73C-4774-B756-AB11202D46B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CF69567-B73C-4774-B756-AB11202D46B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CF69567-B73C-4774-B756-AB11202D46B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CF69567-B73C-4774-B756-AB11202D46B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

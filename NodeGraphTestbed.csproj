@@ -43,17 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source_files\BFS.cs" />
-    <Compile Include="Source_files\DFS.cs" />
-    <Compile Include="Source_files\DFS_R.cs" />
-    <Compile Include="Source_files\Graph.cs" />
-    <Compile Include="Source_files\Step.cs" />
     <Compile Include="Source_files\UI_Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Graph\Graph.csproj">
+      <Project>{0cf69567-b73c-4774-b756-ab11202d46b8}</Project>
+      <Name>Graph</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
