@@ -69,7 +69,6 @@ namespace Graphs
             }
         }
 
-
         public List<string> _DFSRPathfind(Graph graph, string from, string to)
         {
             ClearClosedSet(ref closedSet);
